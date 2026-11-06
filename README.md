@@ -1,456 +1,297 @@
-﻿# \# 🖤 BLACKOUT LAB
+﻿# 🖤 BLACKOUT LAB
 
-# 
+### Plataforma Modular de Segurança Ofensiva | Python
 
-# \### Plataforma Modular de Segurança Ofensiva | Python
+O **BLACKOUT LAB** é uma plataforma educacional de segurança cibernética desenvolvida em Python, criada para praticar conceitos de programação, reconhecimento de redes, análise de tráfego, testes de desempenho e simulação de vulnerabilidades.
 
-# 
+O projeto reúne diferentes ferramentas em uma única aplicação de terminal, permitindo executar testes controlados, analisar resultados e gerar relatórios para estudo.
 
-# O \*\*BLACKOUT LAB\*\* é uma plataforma educacional de segurança cibernética desenvolvida em Python, criada para praticar conceitos de programação, reconhecimento de redes, análise de tráfego, testes de desempenho e simulação de vulnerabilidades.
+> Projeto desenvolvido para fins educacionais e testes em ambientes próprios, autorizados e isolados.
 
-# 
+\---
 
-# O projeto reúne diferentes ferramentas em uma única aplicação de terminal, permitindo executar testes controlados, analisar resultados e gerar relatórios para estudo.
+## 🚀 Funcionalidades
 
-# 
+O BLACKOUT LAB possui cinco módulos principais:
 
-# > Projeto desenvolvido para fins educacionais e testes em ambientes próprios, autorizados e isolados.
+### 1. 🔎 Reconnaissance — Reconhecimento
 
-# 
+Realiza reconhecimento básico de alvos em ambientes autorizados.
 
-# \---
+\- Verificação de portas TCP.
 
-# 
+\- Identificação básica de serviços.
 
-# \## 🚀 Funcionalidades
+\- Análise de portas abertas e fechadas.
 
-# 
+\- Geração de relatórios em JSON.
 
-# O BLACKOUT LAB possui cinco módulos principais:
+### 2. 📡 Traffic Generation — Geração de Tráfego
 
-# 
+Permite gerar requisições HTTP controladas para observar o comportamento de uma aplicação.
 
-# \### 1. 🔎 Reconnaissance — Reconhecimento
+\- Envio de requisições HTTP.
 
-# 
+\- Monitoramento de códigos de resposta.
 
-# Realiza reconhecimento básico de alvos em ambientes autorizados.
+\- Medição de latência.
 
-# 
+\- Contabilização de requisições e erros.
 
-# \- Verificação de portas TCP.
+### 3. ⚡ Stress Testing — Testes de Estresse
 
-# \- Identificação básica de serviços.
+Executa testes controlados para analisar como uma aplicação responde a diferentes níveis de carga.
 
-# \- Análise de portas abertas e fechadas.
+Perfis disponíveis:
 
-# \- Geração de relatórios em JSON.
+\- **Load Test:** aumento gradual da carga.
 
-# 
+\- **Spike Test:** simulação de um pico temporário de requisições.
 
-# \### 2. 📡 Traffic Generation — Geração de Tráfego
+\- **Endurance Test:** execução de carga constante durante um período definido.
 
-# 
+Apresenta métricas como quantidade de requisições, erros, tempo de execução e latência média.
 
-# Permite gerar requisições HTTP controladas para observar o comportamento de uma aplicação.
+### 4. 🧪 Exploitation Simulation — Simulação de Exploração
 
-# 
+Demonstra, em um laboratório local e isolado, como uma consulta SQL vulnerável pode permitir manipulação de autenticação.
 
-# \- Envio de requisições HTTP.
+\- Simulação educacional de SQL Injection.
 
-# \- Monitoramento de códigos de resposta.
+\- Comparação entre consultas vulneráveis e consultas parametrizadas.
 
-# \- Medição de latência.
+\- Demonstração de possível bypass de autenticação.
 
-# \- Contabilização de requisições e erros.
+\- Registro das evidências em JSON.
 
-# 
+O módulo utiliza um banco SQLite temporário em memória e dados fictícios.
 
-# \### 3. ⚡ Stress Testing — Testes de Estresse
+### 5. 📊 Campaign Reports — Relatórios de Campanha
 
-# 
+Centraliza os resultados gerados pelos módulos.
 
-# Executa testes controlados para analisar como uma aplicação responde a diferentes níveis de carga.
+\- Listagem de relatórios.
 
-# 
+\- Visualização de resultados.
 
-# Perfis disponíveis:
+\- Consulta de métricas.
 
-# 
+\- Exibição de evidências da simulação de exploração.
 
-# \- \*\*Load Test:\*\* aumento gradual da carga.
+\- Armazenamento dos resultados em arquivos JSON.
 
-# \- \*\*Spike Test:\*\* simulação de um pico temporário de requisições.
+\---
 
-# \- \*\*Endurance Test:\*\* execução de carga constante durante um período definido.
+## 🛠️ Tecnologias utilizadas
 
-# 
+| Tecnologia | Finalidade |
 
-# Apresenta métricas como quantidade de requisições, erros, tempo de execução e latência média.
+|---|---|
 
-# 
+| Python | Linguagem principal |
 
-# \### 4. 🧪 Exploitation Simulation — Simulação de Exploração
+| Requests | Requisições HTTP |
 
-# 
+| Rich | Interface visual no terminal |
 
-# Demonstra, em um laboratório local e isolado, como uma consulta SQL vulnerável pode permitir manipulação de autenticação.
+| SQLite | Simulação de consultas SQL |
 
-# 
+| JSON | Armazenamento de relatórios |
 
-# \- Simulação educacional de SQL Injection.
+\---
 
-# \- Comparação entre consultas vulneráveis e consultas parametrizadas.
+## 📋 Requisitos
 
-# \- Demonstração de possível bypass de autenticação.
+Antes de instalar, você precisa ter:
 
-# \- Registro das evidências em JSON.
+\- Python instalado.
 
-# 
+\- Git instalado (opcional, mas recomendado).
 
-# O módulo utiliza um banco SQLite temporário em memória e dados fictícios.
+\- Terminal ou PowerShell.
 
-# 
+\- Conexão com a internet para instalar as dependências.
 
-# \### 5. 📊 Campaign Reports — Relatórios de Campanha
+\---
 
-# 
+## 📥 Instalação
 
-# Centraliza os resultados gerados pelos módulos.
+### 1. Clonar o repositório
 
-# 
+```bash
 
-# \- Listagem de relatórios.
+git clone https://github.com/vandreysouzat-code/BLACKOUT-LAB.git
 
-# \- Visualização de resultados.
+```
 
-# \- Consulta de métricas.
+### 2. Acessar a pasta
 
-# \- Exibição de evidências da simulação de exploração.
+```bash
 
-# \- Armazenamento dos resultados em arquivos JSON.
+cd BLACKOUT-LAB
 
-# 
+```
 
-# \---
+### 3. Criar um ambiente virtual
 
-# 
+**Windows:**
 
-# \## 🛠️ Tecnologias utilizadas
+```powershell
 
-# 
+python -m venv .venv
 
-# | Tecnologia | Finalidade |
+```
 
-# |---|---|
+**Linux:**
 
-# | Python | Linguagem principal |
+```bash
 
-# | Requests | Requisições HTTP |
+python3 -m venv .venv
 
-# | Rich | Interface visual no terminal |
+```
 
-# | SQLite | Simulação de consultas SQL |
+### 4. Ativar o ambiente virtual
 
-# | JSON | Armazenamento de relatórios |
+**Windows PowerShell:**
 
-# 
+```powershell
 
-# \---
+.\\.venv\\Scripts\\Activate.ps1
 
-# 
+```
 
-# \## 📋 Requisitos
+**Windows CMD:**
 
-# 
+```cmd
 
-# Antes de instalar, você precisa ter:
+.venv\\Scripts\\activate.bat
 
-# 
+```
 
-# \- Python instalado.
+**Linux:**
 
-# \- Git instalado (opcional, mas recomendado).
+```bash
 
-# \- Terminal ou PowerShell.
+source .venv/bin/activate
 
-# \- Conexão com a internet para instalar as dependências.
+```
 
-# 
+### 5. Instalar as dependências
 
-# \---
+```bash
 
-# 
+pip install -r requirements.txt
 
-# \## 📥 Instalação
+```
 
-# 
+\---
 
-# \### 1. Clonar o repositório
+## ▶️ Como executar
 
-# 
+Com o ambiente virtual ativado, execute:
 
-# ```bash
+```bash
 
-# git clone https://github.com/vandreysouzat-code/BLACKOUT-LAB.git
+python main.py
 
-# ```
+```
 
-# 
+No Windows, também é possível executar diretamente:
 
-# \### 2. Acessar a pasta
+```powershell
 
-# 
+.\\.venv\\Scripts\\python.exe .\\main.py
 
-# ```bash
+```
 
-# cd BLACKOUT-LAB
+Após iniciar, o menu principal apresentará os módulos disponíveis. Escolha o número correspondente à funcionalidade que deseja utilizar.
 
-# ```
+\---
 
-# 
+## 📁 Estrutura do projeto
 
-# \### 3. Criar um ambiente virtual
+```text
 
-# 
+BLACKOUT-LAB/
 
-# \*\*Windows:\*\*
+│
 
-# 
+├── core/
 
-# ```powershell
+│   └── \_\_init\_\_.py
 
-# python -m venv .venv
+│
 
-# ```
+├── modules/
 
-# 
+│   ├── \_\_init\_\_.py
 
-# \*\*Linux:\*\*
+│   ├── recon.py
 
-# 
+│   ├── traffic.py
 
-# ```bash
+│   ├── stress.py
 
-# python3 -m venv .venv
+│   ├── exploitation.py
 
-# ```
+│   └── reports.py
 
-# 
+│
 
-# \### 4. Ativar o ambiente virtual
+├── reports/
 
-# 
+│
 
-# \*\*Windows PowerShell:\*\*
+├── main.py
 
-# 
+├── requirements.txt
 
-# ```powershell
+├── README.md
 
-# .\\.venv\\Scripts\\Activate.ps1
+└── .gitignore
 
-# ```
+```
 
-# 
+\---
 
-# \*\*Windows CMD:\*\*
+## 🔐 Uso responsável
 
-# 
+O BLACKOUT LAB foi desenvolvido exclusivamente para aprendizado e testes de segurança autorizados.
 
-# ```cmd
+\- Utilize somente sistemas próprios ou com autorização expressa.
 
-# .venv\\Scripts\\activate.bat
+\- Execute os testes de tráfego e estresse em ambientes controlados.
 
-# ```
+\- Não utilize a plataforma para interromper serviços ou prejudicar terceiros.
 
-# 
+\- Realize simulações de exploração somente em laboratórios educacionais.
 
-# \*\*Linux:\*\*
+O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
 
-# 
+\---
 
-# ```bash
+## 🎯 Objetivo do projeto
 
-# source .venv/bin/activate
+O BLACKOUT LAB nasceu com o objetivo de transformar conhecimentos teóricos em experiências práticas de desenvolvimento e segurança cibernética.
 
-# ```
+Mais do que reunir funcionalidades, o projeto representa uma jornada de aprendizado envolvendo programação Python, segurança ofensiva, análise de vulnerabilidades, testes e desenvolvimento de ferramentas próprias.
 
-# 
+**O projeto continua em evolução e novas funcionalidades poderão ser adicionadas.**
 
-# \### 5. Instalar as dependências
+\---
 
-# 
+## 👨‍💻 Desenvolvedor
 
-# ```bash
+**Victor Andrey**
 
-# pip install -r requirements.txt
+Estudante de Engenharia de Software | Interessado em Cybersecurity, Ethical Hacking, Python e Cloud Computing.
 
-# ```
+🔗 **GitHub:** https://github.com/vandreysouzat-code
 
-# 
+🔗 **Projeto:** https://github.com/vandreysouzat-code/BLACKOUT-LAB
 
-# \---
+\---
 
-# 
+*Aprender construindo. Evoluir testando. Proteger entendendo.* 🖤
 
-# \## ▶️ Como executar
-
-# 
-
-# Com o ambiente virtual ativado, execute:
-
-# 
-
-# ```bash
-
-# python main.py
-
-# ```
-
-# 
-
-# No Windows, também é possível executar diretamente:
-
-# 
-
-# ```powershell
-
-# .\\.venv\\Scripts\\python.exe .\\main.py
-
-# ```
-
-# 
-
-# Após iniciar, o menu principal apresentará os módulos disponíveis. Escolha o número correspondente à funcionalidade que deseja utilizar.
-
-# 
-
-# \---
-
-# 
-
-# \## 📁 Estrutura do projeto
-
-# 
-
-# ```text
-
-# BLACKOUT-LAB/
-
-# │
-
-# ├── core/
-
-# │   └── \_\_init\_\_.py
-
-# │
-
-# ├── modules/
-
-# │   ├── \_\_init\_\_.py
-
-# │   ├── recon.py
-
-# │   ├── traffic.py
-
-# │   ├── stress.py
-
-# │   ├── exploitation.py
-
-# │   └── reports.py
-
-# │
-
-# ├── reports/
-
-# │
-
-# ├── main.py
-
-# ├── requirements.txt
-
-# ├── README.md
-
-# └── .gitignore
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## 🔐 Uso responsável
-
-# 
-
-# O BLACKOUT LAB foi desenvolvido exclusivamente para aprendizado e testes de segurança autorizados.
-
-# 
-
-# \- Utilize somente sistemas próprios ou com autorização expressa.
-
-# \- Execute os testes de tráfego e estresse em ambientes controlados.
-
-# \- Não utilize a plataforma para interromper serviços ou prejudicar terceiros.
-
-# \- Realize simulações de exploração somente em laboratórios educacionais.
-
-# 
-
-# O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
-
-# 
-
-# \---
-
-# 
-
-# \## 🎯 Objetivo do projeto
-
-# 
-
-# O BLACKOUT LAB nasceu com o objetivo de transformar conhecimentos teóricos em experiências práticas de desenvolvimento e segurança cibernética.
-
-# 
-
-# Mais do que reunir funcionalidades, o projeto representa uma jornada de aprendizado envolvendo programação Python, segurança ofensiva, análise de vulnerabilidades, testes e desenvolvimento de ferramentas próprias.
-
-# 
-
-# \*\*O projeto continua em evolução e novas funcionalidades poderão ser adicionadas.\*\*
-
-# 
-
-# \---
-
-# 
-
-# \## 👨‍💻 Desenvolvedor
-
-# 
-
-# \*\*Victor Andrey\*\*
-
-# 
-
-# Estudante de Engenharia de Software | Interessado em Cybersecurity, Ethical Hacking, Python e Cloud Computing.
-
-# 
-
-# 🔗 \*\*GitHub:\*\* https://github.com/vandreysouzat-code
-
-# 
-
-# 🔗 \*\*Projeto:\*\* https://github.com/vandreysouzat-code/BLACKOUT-LAB
-
-# 
-
-# \---
-
-# 
-
-\*Aprender construindo. Evoluir testando. Proteger entendendo.\* 🖤
 
