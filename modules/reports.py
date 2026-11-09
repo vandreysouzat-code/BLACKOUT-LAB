@@ -1,4 +1,5 @@
-﻿import json
+
+import json
 from pathlib import Path
 
 from rich.console import Console
@@ -37,12 +38,12 @@ def load_reports():
 
 
 def show_report_list(reports):
-    table = Table(title="Relatórios disponíveis")
+    table = Table(title="Relatorios disponiveis")
 
     table.add_column("ID", style="cyan")
     table.add_column("Arquivo")
     table.add_column("Alvo", style="green")
-    table.add_column("Módulo")
+    table.add_column("Modulo")
 
     for index, report in enumerate(reports, start=1):
         data = report["data"]
@@ -61,7 +62,7 @@ def show_report_details(data):
     console.print(
         Panel(
             f"[bold]Alvo:[/bold] {data.get('target', 'N/A')}\n"
-            f"[bold]Módulo:[/bold] {data.get('module', 'N/A')}\n"
+            f"[bold]Modulo:[/bold] {data.get('module', 'N/A')}\n"
             f"[bold]Data UTC:[/bold] "
             f"{data.get('timestamp_utc', 'N/A')}",
             title="Detalhes da campanha",
@@ -83,16 +84,19 @@ def show_report_details(data):
     elif module == "Exploitation Simulation":
         show_exploitation_results(data)
 
+    elif module == "Web Reconnaissance":
+        show_web_recon_results(data)
+
     else:
         console.print(
-            "[yellow]Formato de relatório não reconhecido.[/yellow]"
+            "[yellow]Formato de relatorio nao reconhecido.[/yellow]"
         )
 
 
 def show_recon_results(data):
     addresses = data.get("resolved_addresses", [])
 
-    console.print("\n[bold cyan]Endereços encontrados[/bold cyan]")
+    console.print("\n[bold cyan]Enderecos encontrados[/bold cyan]")
 
     for address in addresses:
         console.print(f" - {address}")
@@ -102,7 +106,7 @@ def show_recon_results(data):
     table.add_column("Porta", style="cyan")
     table.add_column("Protocolo")
     table.add_column("Estado")
-    table.add_column("Serviço")
+    table.add_column("Servico")
 
     for result in data.get("results", []):
         status = str(
@@ -121,14 +125,81 @@ def show_recon_results(data):
     console.print(table)
 
 
+def show_web_recon_results(data):
+    results = data.get("results", {})
+    page = results.get("page", {})
+
+    console.print("\n[bold cyan]Informacoes da pagina[/bold cyan]")
+
+    table = Table(title="Web Reconnaissance")
+
+    table.add_column("Item", style="cyan")
+    table.add_column("Resultado", style="green")
+
+    table.add_row("HTTP Status", str(page.get("status_code", "N/A")))
+    table.add_row("Page Title", str(page.get("title", "N/A")))
+    table.add_row("Server", str(page.get("server", "N/A")))
+    table.add_row("Content-Type", str(page.get("content_type", "N/A")))
+    table.add_row("Content-Length", str(page.get("content_length", "N/A")))
+    table.add_row(
+        "HTTP Methods",
+        str(results.get("allowed_methods", "N/A"))
+    )
+
+    robots = results.get("robots_txt", {})
+
+    table.add_row(
+        "robots.txt",
+        str(robots.get("status_code", "N/A"))
+    )
+
+    console.print(table)
+
+    headers = page.get("security_headers", [])
+
+    header_table = Table(title="Security Headers")
+
+    header_table.add_column("Header", style="cyan")
+    header_table.add_column("Status")
+    header_table.add_column("Descricao")
+
+    for item in headers:
+        present = item.get("present", False)
+
+        status = (
+            "[green]Present[/green]"
+            if present
+            else "[yellow]Missing[/yellow]"
+        )
+
+        header_table.add_row(
+            str(item.get("header", "N/A")),
+            status,
+            str(item.get("description", "N/A"))
+        )
+
+    console.print(header_table)
+
+    console.print("\n[bold cyan]robots.txt content[/bold cyan]")
+
+    console.print(
+        robots.get("content", "Nao disponivel.")
+    )
+
+    if page.get("response_truncated"):
+        console.print(
+            "\n[yellow]A resposta foi parcialmente analisada.[/yellow]"
+        )
+
+
 def show_metrics_table(metrics, title):
     table = Table(title=title)
 
-    table.add_column("Métrica")
+    table.add_column("Metrica")
     table.add_column("Resultado", style="green")
 
     table.add_row(
-        "Total de requisições",
+        "Total de requisicoes",
         str(metrics.get("total_requests", 0))
     )
 
@@ -145,7 +216,7 @@ def show_metrics_table(metrics, title):
     average = metrics.get("average_latency_ms")
 
     table.add_row(
-        "Latência média",
+        "Latencia media",
         f"{average} ms" if average is not None else "N/A"
     )
 
@@ -160,20 +231,20 @@ def show_metrics_table(metrics, title):
 def show_traffic_results(data):
     configuration = data.get("configuration", {})
 
-    console.print("\n[bold cyan]Configuração do teste[/bold cyan]")
+    console.print("\n[bold cyan]Configuracao do teste[/bold cyan]")
 
     config_table = Table()
 
-    config_table.add_column("Parâmetro")
+    config_table.add_column("Parametro")
     config_table.add_column("Valor", style="green")
 
     config_table.add_row(
-        "Duração",
+        "Duracao",
         f"{configuration.get('duration_seconds', 'N/A')} segundos"
     )
 
     config_table.add_row(
-        "Limite de requisições",
+        "Limite de requisicoes",
         f"{configuration.get('maximum_requests_per_second', 'N/A')} RPS"
     )
 
@@ -181,17 +252,17 @@ def show_traffic_results(data):
 
     show_metrics_table(
         data.get("metrics", {}),
-        "Métricas da execução"
+        "Metricas da execucao"
     )
 
     results = data.get("results", [])
 
     if results:
-        table = Table(title="Detalhes das requisições")
+        table = Table(title="Detalhes das requisicoes")
 
         table.add_column("#", style="cyan")
         table.add_column("Status")
-        table.add_column("Latência")
+        table.add_column("Latencia")
 
         for index, result in enumerate(results, start=1):
             latency = result.get("latency_ms")
@@ -208,11 +279,11 @@ def show_traffic_results(data):
 def show_stress_results(data):
     configuration = data.get("configuration", {})
 
-    console.print("\n[bold cyan]Configuração do teste[/bold cyan]")
+    console.print("\n[bold cyan]Configuracao do teste[/bold cyan]")
 
     config_table = Table()
 
-    config_table.add_column("Parâmetro")
+    config_table.add_column("Parametro")
     config_table.add_column("Valor", style="green")
 
     config_table.add_row(
@@ -221,7 +292,7 @@ def show_stress_results(data):
     )
 
     config_table.add_row(
-        "Descrição",
+        "Descricao",
         str(configuration.get("description", "N/A"))
     )
 
@@ -239,7 +310,7 @@ def show_stress_results(data):
 
         planned_table.add_column("Etapa")
         planned_table.add_column("RPS")
-        planned_table.add_column("Duração planejada")
+        planned_table.add_column("Duracao planejada")
 
         for index, stage in enumerate(stages, start=1):
             planned_table.add_row(
@@ -252,7 +323,7 @@ def show_stress_results(data):
 
     show_metrics_table(
         data.get("metrics", {}),
-        "Métricas gerais do teste"
+        "Metricas gerais do teste"
     )
 
     stage_results = data.get("stage_results", [])
@@ -264,8 +335,8 @@ def show_stress_results(data):
         stage_table.add_column("RPS")
         stage_table.add_column("Respostas")
         stage_table.add_column("Erros")
-        stage_table.add_column("Latência média")
-        stage_table.add_column("Duração real")
+        stage_table.add_column("Latencia media")
+        stage_table.add_column("Duracao real")
 
         for stage in stage_results:
             metrics = stage.get("metrics", {})
@@ -285,13 +356,13 @@ def show_stress_results(data):
     results = data.get("results", [])
 
     if results:
-        request_table = Table(title="Detalhes das requisições")
+        request_table = Table(title="Detalhes das requisicoes")
 
         request_table.add_column("#", style="cyan")
         request_table.add_column("Etapa")
         request_table.add_column("RPS")
         request_table.add_column("Status")
-        request_table.add_column("Latência")
+        request_table.add_column("Latencia")
 
         for index, result in enumerate(results, start=1):
             latency = result.get("latency_ms")
@@ -314,10 +385,10 @@ def show_exploitation_results(data):
     vulnerable = results.get("vulnerable_query", {})
     secure = results.get("parameterized_query", {})
 
-    table = Table(title="Resultados da exploração")
+    table = Table(title="Resultados da exploracao")
 
-    table.add_column("Métrica")
-    table.add_column("Consulta vulnerável")
+    table.add_column("Metrica")
+    table.add_column("Consulta vulneravel")
     table.add_column("Consulta segura")
 
     table.add_row(
@@ -327,9 +398,9 @@ def show_exploitation_results(data):
     )
 
     table.add_row(
-        "Bypass de autenticação",
-        "Sim" if vulnerable.get("authentication_bypassed") else "Não",
-        "Sim" if secure.get("authentication_bypassed") else "Não"
+        "Bypass de autenticacao",
+        "Sim" if vulnerable.get("authentication_bypassed") else "Nao",
+        "Sim" if secure.get("authentication_bypassed") else "Nao"
     )
 
     console.print(table)
@@ -342,7 +413,7 @@ def show_exploitation_results(data):
         )
     else:
         console.print(
-            "\n[bold green]Nenhuma injeção confirmada[/bold green]"
+            "\n[bold green]Nenhuma injecao confirmada[/bold green]"
         )
 
     evidence = data.get("evidence", {})
@@ -350,11 +421,11 @@ def show_exploitation_results(data):
 
     if accounts:
         evidence_table = Table(
-            title="Registros retornados como evidência"
+            title="Registros retornados como evidencia"
         )
 
         evidence_table.add_column("ID")
-        evidence_table.add_column("Usuário")
+        evidence_table.add_column("Usuario")
         evidence_table.add_column("Perfil")
 
         for account in accounts:
@@ -367,8 +438,8 @@ def show_exploitation_results(data):
         console.print(evidence_table)
 
     console.print(
-        "\n[bold]Conclusão:[/bold] "
-        + data.get("conclusion", "Sem conclusão registrada.")
+        "\n[bold]Conclusao:[/bold] "
+        + data.get("conclusion", "Sem conclusao registrada.")
     )
 
 
@@ -385,7 +456,7 @@ def show_reports():
 
     if not reports:
         console.print(
-            "[yellow]Nenhum relatório encontrado.[/yellow]"
+            "[yellow]Nenhum relatorio encontrado.[/yellow]"
         )
         return
 
@@ -403,7 +474,7 @@ def show_reports():
         not choice.isdigit()
         or not 1 <= int(choice) <= len(reports)
     ):
-        console.print("[red]ID inválido.[/red]")
+        console.print("[red]ID invalido.[/red]")
         return
 
     selected = reports[int(choice) - 1]

@@ -8,6 +8,7 @@ from modules.reports import show_reports
 from modules.traffic import traffic_generation
 from modules.stress import stress_testing
 from modules.exploitation import exploitation_simulation
+from modules.web_recon import web_reconnaissance
 
 console = Console()
 
@@ -17,7 +18,7 @@ def banner():
         Panel(
             "[bold cyan]BLACKOUT LAB[/bold cyan]\n"
             "[white]OFFENSIVE SECURITY PLATFORM[/white]\n"
-            "[dim]Version 1.0.0[/dim]",
+            "[dim]Version 1.1.0[/dim]",
             border_style="cyan"
         )
     )
@@ -30,6 +31,7 @@ def menu():
         "3": "Stress Testing",
         "4": "Exploitation Simulation",
         "5": "Campaign Reports",
+        "6": "Web Reconnaissance",
         "0": "Exit"
     }
 
@@ -61,6 +63,9 @@ def menu():
 
     elif choice == "5":
         show_reports()
+
+    elif choice == "6":
+        web_reconnaissance()
 
     return True
 
