@@ -1,149 +1,157 @@
-﻿# 🦉 SOVIK
+# 🦉 SOVIK
 
 ### Offensive Security Platform | Python | Version 2.0.0
 
-O **SOVIK** é uma plataforma modular desenvolvida em Python para estudos práticos de segurança ofensiva, reconhecimento e análise de aplicações.
+O **SOVIK** é uma plataforma modular de segurança ofensiva desenvolvida em Python, criada para transformar conhecimentos teóricos de cibersegurança em ferramentas práticas.
 
-O projeto reúne ferramentas de reconhecimento, geração controlada de tráfego, testes de estresse com limites definidos, simulação de exploração em laboratório e análise web.
+O projeto reúne módulos de reconhecimento, análise web, geração controlada de tráfego, testes de estresse e simulação de exploração em uma aplicação de terminal.
 
-A versão 2.0.0 também conta com uma estrutura de gerenciamento de campanhas, histórico de execuções, persistência de dados e testes automatizados.
+Seu desenvolvimento faz parte de uma jornada prática de estudos em **Análise e Desenvolvimento de Sistemas (ADS), Python, Red Team, Ethical Hacking e desenvolvimento de ferramentas de segurança**.
 
-> Projeto educacional destinado exclusivamente a ambientes próprios, laboratórios controlados e sistemas com autorização expressa.
+> Projeto educacional destinado exclusivamente a laboratórios próprios, ambientes isolados e sistemas com autorização expressa.
 
 ---
 
 ## 🚀 Funcionalidades
 
-### 1. 🔎 Reconnaissance
-- Reconhecimento básico de alvos.
-- Verificação de portas TCP.
-- Identificação de serviços.
-- Registro dos resultados em relatórios JSON.
+Atualmente, o SOVIK possui seis módulos principais:
 
-### 2. 📡 Traffic Generation
-- Geração controlada de requisições HTTP.
+### 1. 🔎 Reconnaissance — Reconhecimento
+
+Realiza reconhecimento básico de alvos em ambientes autorizados.
+
+- Verificação de portas TCP.
+- Identificação básica de serviços.
+- Análise de portas abertas e fechadas.
+- Validação de alvos por meio do Core Engine.
+- Geração de relatórios em JSON.
+
+### 2. 📡 Traffic Generation — Geração de Tráfego
+
+Permite gerar requisições HTTP controladas para observar o comportamento de uma aplicação.
+
+- Envio de requisições HTTP.
 - Monitoramento de códigos de resposta.
 - Medição de latência.
 - Contabilização de requisições e erros.
-- Limites de execução configurados para uso controlado.
+- Registro das operações executadas.
 
-### 3. ⚡ Stress Testing
-- Perfis Load Test, Spike Test e Endurance Test.
-- Métricas de requisições, erros e latência.
-- Execução limitada a 2 requisições por segundo e duração máxima de 10 segundos.
-- Validação de escopo e restrições para alvos.
+### 3. ⚡ Stress Testing — Testes de Estresse
 
-### 4. 🧪 Exploitation Simulation
-- Simulação educacional de SQL Injection.
-- Comparação entre consultas vulneráveis e parametrizadas.
-- Demonstração de possível bypass de autenticação.
-- Uso de SQLite temporário em memória e dados fictícios.
-- Registro de evidências em JSON.
+Executa testes controlados para analisar como uma aplicação responde a diferentes níveis de carga.
 
-### 5. 📊 Campaign Reports
-- Listagem de relatórios.
-- Visualização de resultados.
-- Consulta de métricas e evidências.
-- Tratamento de relatórios inválidos ou incompletos.
+- Testes de carga em ambiente autorizado.
+- Monitoramento de respostas.
+- Coleta de métricas de execução.
+- Limites de duração e frequência.
 
-### 6. 🌐 Web Reconnaissance
-- Identificação de status HTTP.
-- Extração do título da página.
-- Identificação de servidor e Content-Type.
-- Consulta de métodos HTTP anunciados.
-- Verificação de cabeçalhos de segurança.
-- Consulta ao arquivo robots.txt.
-- Limitação da quantidade de conteúdo HTTP lido.
+### 4. 💉 Exploitation Simulation — Simulação de Exploração
+
+Demonstra conceitos de exploração de vulnerabilidades em ambiente educacional.
+
+- Simulação de SQL Injection.
+- Utilização de banco SQLite em memória.
+- Dados fictícios para demonstração.
+- Execução isolada, sem exploração de sistemas externos.
+
+### 5. 🌐 Web Reconnaissance — Reconhecimento Web
+
+Realiza inspeções básicas de aplicações web.
+
+- Verificação de disponibilidade HTTP/HTTPS.
+- Análise de cabeçalhos HTTP.
+- Identificação de métodos HTTP.
+- Inspeção de robots.txt.
+- Análise de informações de resposta.
+- Geração de relatórios.
+
+### 6. 📊 Reports — Relatórios
+
+Centraliza os resultados das operações realizadas pelos módulos.
+
 - Geração de relatórios JSON.
-
-As verificações são informativas: cabeçalhos ausentes ou métodos anunciados não representam, isoladamente, vulnerabilidades confirmadas.
+- Registro de informações das execuções.
+- Organização dos resultados por módulo.
+- Histórico local das atividades.
 
 ---
 
-## 🧩 Gerenciamento e controle
+## 🧠 Core Engine
 
-Além dos módulos de análise, o menu disponibiliza:
+O SOVIK possui uma estrutura central responsável por organizar e controlar as operações dos módulos.
 
-- **Campaign Manager:** gerenciamento de campanhas.
-- **Execution History:** consulta do histórico de execuções.
-- **System Information:** informações da aplicação e configurações do laboratório.
+Entre seus componentes estão:
 
-A estrutura `core` centraliza configurações, banco de dados, escopo, operações, campanhas, registros e controle de execução.
+- **Scope:** validação de alvos e escopo permitido.
+- **Operations:** registro e controle das operações.
+- **Campaigns:** gerenciamento de campanhas.
+- **Database:** persistência de informações.
+- **Logger:** registro centralizado de eventos.
+- **Execution:** controle de execução.
+- **Lab:** configurações do ambiente de laboratório.
+
+A arquitetura modular permite organizar funcionalidades, facilitar a manutenção e ampliar o projeto de maneira estruturada.
+
+---
+
+## 🛡️ Controles e limitações
+
+O projeto possui restrições para reduzir riscos durante os testes:
+
+- Alvos públicos desabilitados por padrão.
+- Exigência de escopo explícito.
+- Geração de tráfego limitada a até 2 requisições por segundo.
+- Duração máxima de 10 segundos para operações de tráfego controlado.
+- Testes de estresse restritos a ambientes autorizados.
+- Recursos de laboratório distribuído desabilitados por padrão.
+- Esta versão não implementa funcionalidades operacionais de DoS ou DDoS.
+
+Essas limitações fazem parte da proposta educacional e de uso controlado do projeto.
 
 ---
 
 ## 🛠️ Tecnologias utilizadas
 
-| Tecnologia | Finalidade |
-|---|---|
-| Python | Linguagem principal |
-| Requests | Requisições HTTP |
-| Rich | Interface no terminal |
-| SQLite | Persistência e simulação SQL |
-| JSON | Relatórios |
-| Unittest | Testes automatizados |
-| Git | Controle de versão |
+- Python
+- SQLite
+- Requests
+- Rich
+- Unittest
+- Git e GitHub
 
 ---
 
-## 📋 Requisitos
+## 📦 Instalação
 
-- Python 3.
-- Git (recomendado).
-- PowerShell, CMD ou terminal Linux.
-- Conexão com a internet para instalar as dependências.
-
----
-
-## 📥 Instalação
-
-### 1. Clonar o repositório
+Clone o repositório:
 
 ```bash
 git clone https://github.com/vandreysouzat-code/SOVIK.git
 ```
 
-### 2. Acessar a pasta
+Entre na pasta:
 
 ```bash
 cd SOVIK
 ```
 
-### 3. Criar um ambiente virtual
+Crie um ambiente virtual:
 
 **Windows:**
 
 ```powershell
 python -m venv .venv
+.venv\Scripts\Activate.ps1
 ```
 
 **Linux:**
 
 ```bash
 python3 -m venv .venv
-```
-
-### 4. Ativar o ambiente virtual
-
-**Windows PowerShell:**
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-**Windows CMD:**
-
-```cmd
-.venv\Scripts\activate.bat
-```
-
-**Linux:**
-
-```bash
 source .venv/bin/activate
 ```
 
-### 5. Instalar as dependências
+Instale as dependências:
 
 ```bash
 pip install -r requirements.txt
@@ -165,23 +173,29 @@ No Windows, também é possível executar diretamente:
 .\.venv\Scripts\python.exe .\main.py
 ```
 
-O menu principal disponibiliza seis módulos funcionais, além das opções de gerenciamento, histórico e informações do sistema.
+O menu principal apresenta os módulos disponíveis. Escolha o número correspondente à funcionalidade desejada.
 
 ---
 
 ## 🧪 Testes automatizados
 
-O projeto utiliza `unittest` para validar seus componentes e funcionalidades.
+O projeto utiliza `unittest`, biblioteca nativa do Python, para validar seus componentes.
 
-Execute todos os testes:
+Execute os testes com:
 
-**Windows PowerShell ou Linux:**
+**Windows PowerShell:**
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+**Linux:**
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-A versão 2.0.0 foi validada com **181 testes automatizados aprovados**.
+A suíte de testes possui **181 testes automatizados**, cobrindo componentes como escopo, banco de dados, logger, operações, reconhecimento, tráfego, testes de estresse, exploração simulada e reconhecimento web.
 
 ---
 
@@ -201,12 +215,12 @@ SOVIK/
 │   └── scope.py
 │
 ├── modules/
-│   ├── exploitation.py
 │   ├── recon.py
-│   ├── reports.py
-│   ├── stress.py
 │   ├── traffic.py
-│   └── web_recon.py
+│   ├── stress.py
+│   ├── exploitation.py
+│   ├── web_recon.py
+│   └── reports.py
 │
 ├── tests/
 │   ├── test_campaigns.py
@@ -223,29 +237,26 @@ SOVIK/
 │   ├── test_traffic.py
 │   └── test_web_recon.py
 │
+├── reports/
 ├── main.py
 ├── requirements.txt
 ├── README.md
 └── .gitignore
 ```
 
-Relatórios JSON, bancos de dados locais, logs, ambientes virtuais e arquivos temporários são mantidos fora do controle de versão por meio do `.gitignore`.
+Os relatórios são gerados localmente e os arquivos de saída são ignorados pelo Git.
 
 ---
 
-## 🔐 Uso responsável e segurança
+## 🔐 Uso responsável
 
-O SOVIK foi desenvolvido para aprendizado e testes autorizados.
+O SOVIK foi desenvolvido exclusivamente para aprendizado e testes de segurança autorizados.
 
 - Utilize somente sistemas próprios ou com autorização expressa.
-- Respeite as regras e os limites de escopo.
 - Execute testes de tráfego e estresse em ambientes controlados.
-- Não utilize a ferramenta para interromper serviços ou prejudicar terceiros.
+- Não utilize a plataforma para interromper serviços ou prejudicar terceiros.
 - Realize simulações de exploração somente em laboratórios educacionais.
-
-Os testes de tráfego e estresse possuem limites conservadores. O laboratório experimental de longa duração permanece desabilitado por padrão.
-
-**Esta versão não implementa funcionalidade operacional de DoS ou DDoS.**
+- Respeite os limites de escopo e as regras de cada ambiente de testes.
 
 O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
 
@@ -253,11 +264,11 @@ O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
 
 ## 🎯 Objetivo do projeto
 
-O SOVIK nasceu da vontade de transformar conhecimento teórico em experiência prática.
+O SOVIK nasceu com o objetivo de transformar conhecimentos teóricos em experiências práticas de desenvolvimento e segurança ofensiva.
 
-A construção do projeto envolve desenvolvimento Python, organização modular, testes automatizados, reconhecimento, análise web, simulação controlada de exploração e fundamentos de segurança ofensiva.
+Mais do que reunir funcionalidades, o projeto representa uma jornada de aprendizado envolvendo Python, reconhecimento, exploração controlada, análise de aplicações web, arquitetura modular e desenvolvimento de ferramentas próprias.
 
-O projeto continua em evolução, com foco em aprendizado, qualidade de código e desenvolvimento de ferramentas próprias.
+**O projeto continua em evolução, com foco no aprimoramento de suas funcionalidades, qualidade de código e aprendizado em segurança cibernética.**
 
 ---
 
@@ -265,12 +276,12 @@ O projeto continua em evolução, com foco em aprendizado, qualidade de código 
 
 **Victor Andrey**
 
-Estudante de Análise e Desenvolvimento de Sistemas (ADS) | Cybersecurity | Red Team | Ethical Hacking | Python | Cloud Computing.
+Estudante de Análise e Desenvolvimento de Sistemas (ADS), interessado em Python, Cybersecurity, Red Team, Ethical Hacking e Cloud Computing.
 
-GitHub: https://github.com/vandreysouzat-code
+🔗 **GitHub:** https://github.com/vandreysouzat-code
 
-Projeto: https://github.com/vandreysouzat-code/SOVIK
+🔗 **Projeto:** https://github.com/vandreysouzat-code/SOVIK
 
 ---
 
-*Aprender construindo. Evoluir testando. Proteger entendendo. 🦉*
+*Aprender construindo. Evoluir testando. Proteger entendendo.* 🦉
