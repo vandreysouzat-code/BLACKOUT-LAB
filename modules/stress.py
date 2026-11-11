@@ -1,18 +1,19 @@
 
-import ipaddress
 import json
 import time
 
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlparse
 
 import requests
+
+from core.scope import validate_http_url
 
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 from rich.prompt import Prompt
+
 
 console = Console()
 
@@ -51,41 +52,78 @@ PROFILES = {
 
 
 def validate_url(url):
-    parsed = urlparse(url)
-
-    if parsed.scheme not in ("http", "https"):
-        raise ValueError("Use uma URL HTTP ou HTTPS.")
-
-    if not parsed.hostname:
-        raise ValueError("URL inválida.")
-
-    if parsed.username or parsed.password:
-        raise ValueError("Credenciais na URL não são permitidas.")
-
-    host = parsed.hostname.lower()
-
-    if host == "localhost":
-        return url
+    """Valida o alvo usando o escopo central do Core Engine."""
 
     try:
-        address = ipaddress.ip_address(host)
-    except ValueError:
-        raise ValueError(
-            "Use localhost ou um endereço IP privado."
+        return validate_http_url(
+            url,
+            allow_hostname=False
         )
 
-    if not (address.is_private or address.is_loopback):
+    except ValueError as error:
         raise ValueError(
-            "Somente endereços privados são permitidos."
+            f"Alvo fora do escopo permitido: {error}"
+        ) from error
+
+
+def validate_profile(profile):
+    """Confere os limites de execução do perfil."""
+
+    if not isinstance(profile, dict):
+        raise ValueError("Perfil inválido.")
+
+    stages = profile.get("stages")
+
+    if not isinstance(stages, list) or not stages:
+        raise ValueError("Perfil sem etapas válidas.")
+
+    total_duration = 0
+
+    for stage in stages:
+        if not isinstance(stage, dict):
+            raise ValueError("Etapa inválida.")
+
+        rps = stage.get("rps")
+        seconds = stage.get("seconds")
+
+        if (
+            not isinstance(rps, int)
+            or isinstance(rps, bool)
+            or not 1 <= rps <= MAX_RPS
+        ):
+            raise ValueError(
+                f"Cada etapa deve utilizar entre 1 e {MAX_RPS} RPS."
+            )
+
+        if (
+            not isinstance(seconds, int)
+            or isinstance(seconds, bool)
+            or not 1 <= seconds <= MAX_DURATION
+        ):
+            raise ValueError(
+                "A duração de cada etapa deve ser entre 1 e "
+                f"{MAX_DURATION} segundos."
+            )
+
+        total_duration += seconds
+
+    if total_duration > MAX_DURATION:
+        raise ValueError(
+            f"Duração máxima total de {MAX_DURATION} segundos excedida."
         )
 
-    return url
+    return total_duration
 
 
 def calculate_metrics(results, elapsed):
+    """Calcula as métricas da execução."""
+
     successful = [
         item for item in results
-        if isinstance(item.get("status"), int)
+        if (
+            isinstance(item.get("status"), int)
+            and not isinstance(item.get("status"), bool)
+        )
     ]
 
     errors = len(results) - len(successful)
@@ -93,7 +131,10 @@ def calculate_metrics(results, elapsed):
     latencies = [
         item["latency_ms"]
         for item in successful
-        if item.get("latency_ms") is not None
+        if (
+            isinstance(item.get("latency_ms"), (int, float))
+            and not isinstance(item.get("latency_ms"), bool)
+        )
     ]
 
     average_latency = (
@@ -111,6 +152,22 @@ def calculate_metrics(results, elapsed):
 
 
 def execute_stage(url, rps, seconds, stage_number):
+    """Executa uma etapa com intervalo mínimo entre requisições."""
+
+    if (
+        not isinstance(rps, int)
+        or isinstance(rps, bool)
+        or not 1 <= rps <= MAX_RPS
+    ):
+        raise ValueError("RPS fora do limite permitido.")
+
+    if (
+        not isinstance(seconds, int)
+        or isinstance(seconds, bool)
+        or not 1 <= seconds <= MAX_DURATION
+    ):
+        raise ValueError("Duração da etapa fora do limite permitido.")
+
     results = []
     interval = 1 / rps
     total_requests = rps * seconds
@@ -121,23 +178,37 @@ def execute_stage(url, rps, seconds, stage_number):
     )
 
     stage_start = time.monotonic()
+    planned_end = stage_start + seconds
+    next_allowed_start = stage_start
 
     for request_number in range(total_requests):
-        scheduled_time = stage_start + (request_number * interval)
+        scheduled_time = stage_start + request_number * interval
 
-        wait_time = scheduled_time - time.monotonic()
+        next_request_time = max(
+            scheduled_time,
+            next_allowed_start
+        )
+
+        wait_time = next_request_time - time.monotonic()
 
         if wait_time > 0:
             time.sleep(wait_time)
 
+        if time.monotonic() >= planned_end:
+            break
+
         request_start = time.monotonic()
+        response = None
 
         try:
             response = requests.get(
                 url,
                 timeout=TIMEOUT,
                 allow_redirects=False,
-                stream=True
+                stream=True,
+                headers={
+                    "User-Agent": "BLACKOUT-LAB/2.0"
+                }
             )
 
             latency = (
@@ -151,8 +222,6 @@ def execute_stage(url, rps, seconds, stage_number):
                 "latency_ms": round(latency, 2)
             })
 
-            response.close()
-
         except requests.RequestException as error:
             results.append({
                 "stage": stage_number,
@@ -162,7 +231,13 @@ def execute_stage(url, rps, seconds, stage_number):
                 "error": str(error)
             })
 
-    planned_end = stage_start + seconds
+        finally:
+            if response is not None:
+                response.close()
+
+        # Não recupera atrasos com rajadas de requisições.
+        next_allowed_start = request_start + interval
+
     remaining = planned_end - time.monotonic()
 
     if remaining > 0:
@@ -183,6 +258,8 @@ def execute_stage(url, rps, seconds, stage_number):
 
 
 def save_report(url, profile, results, stage_summaries, elapsed):
+    """Salva o relatório JSON da execução."""
+
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
     metrics = calculate_metrics(results, elapsed)
@@ -219,6 +296,8 @@ def save_report(url, profile, results, stage_summaries, elapsed):
 
 
 def display_results(profile, metrics, stage_summaries):
+    """Exibe as métricas gerais e por etapa."""
+
     table = Table(title="Stress Testing Results")
 
     table.add_column("Métrica", style="cyan")
@@ -275,6 +354,8 @@ def display_results(profile, metrics, stage_summaries):
 
 
 def stress_testing():
+    """Interface principal do módulo de stress testing."""
+
     console.print(
         Panel(
             "[bold cyan]STRESS TESTING[/bold cyan]\n"
@@ -311,17 +392,16 @@ def stress_testing():
 
     try:
         validate_url(url)
-
-        total_duration = sum(
-            stage["seconds"]
-            for stage in profile["stages"]
-        )
-
-        if total_duration > MAX_DURATION:
-            raise ValueError("Duração máxima excedida.")
+        total_duration = validate_profile(profile)
 
         console.print(
             f"\n[bold green]Iniciando {profile['name']}...[/bold green]"
+        )
+
+        console.print(
+            f"[dim]Limites: até {MAX_RPS} RPS | "
+            f"até {MAX_DURATION} segundos | "
+            f"{total_duration} segundos planejados[/dim]"
         )
 
         all_results = []

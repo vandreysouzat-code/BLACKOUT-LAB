@@ -31,3 +31,17 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local application data
+data/
+logs/

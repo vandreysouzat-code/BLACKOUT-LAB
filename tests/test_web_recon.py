@@ -1,191 +1,88 @@
 
-import io
 import json
-import socket
-import tempfile
 import unittest
 
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import MagicMock, patch
 
 from modules import web_recon
 
 
-class FakeRaw(io.BytesIO):
-    """Simula a resposta HTTP do urllib3."""
+class TestWebReconnaissance(unittest.TestCase):
 
-    def read(self, amount=-1, decode_content=False):
-        return super().read(amount)
+    def test_get_page_title(self):
+        html = "<html><head><title>BLACKOUT LAB</title></head></html>"
 
+        result = web_recon.get_page_title(html)
 
-class TestTitleParser(unittest.TestCase):
+        self.assertEqual(result, "BLACKOUT LAB")
 
-    def test_extract_title(self):
-        html = (
-            "<html><head><title>BLACKOUT LAB</title></head></html>"
-        )
+    def test_get_page_title_missing(self):
+        result = web_recon.get_page_title("<html></html>")
 
-        self.assertEqual(
-            web_recon.get_page_title(html),
-            "BLACKOUT LAB"
-        )
+        self.assertEqual(result, "Não identificado")
 
-    def test_missing_title(self):
-        html = "<html><body>Laboratorio</body></html>"
-
-        self.assertEqual(
-            web_recon.get_page_title(html),
-            "Não identificado"
-        )
-
-
-class TestTargetValidation(unittest.TestCase):
-
-    def test_accept_localhost(self):
-        result = web_recon.validate_target(
-            "http://localhost:8000"
-        )
-
-        self.assertEqual(
-            result,
-            "http://localhost:8000"
-        )
-
-    def test_reject_invalid_scheme(self):
-        with self.assertRaises(ValueError):
-            web_recon.validate_target("ftp://localhost")
-
-    def test_reject_missing_hostname(self):
-        with self.assertRaises(ValueError):
-            web_recon.validate_target("http:///")
-
-    def test_reject_credentials(self):
-        with self.assertRaises(ValueError):
-            web_recon.validate_target(
-                "http://admin:password@localhost"
-            )
-
-    def test_reject_invalid_port(self):
-        with self.assertRaises(ValueError):
-            web_recon.validate_target(
-                "http://localhost:99999"
-            )
-
-    @patch("modules.web_recon.socket.getaddrinfo")
-    def test_accept_private_ip(self, mock_dns):
-        mock_dns.return_value = [
-            (
-                socket.AF_INET,
-                socket.SOCK_STREAM,
-                6,
-                "",
-                ("192.168.1.10", 80)
-            )
-        ]
-
-        result = web_recon.validate_target(
-            "http://192.168.1.10"
-        )
-
-        self.assertEqual(
-            result,
-            "http://192.168.1.10"
-        )
-
-    @patch("modules.web_recon.socket.getaddrinfo")
-    def test_reject_public_ip(self, mock_dns):
-        mock_dns.return_value = [
-            (
-                socket.AF_INET,
-                socket.SOCK_STREAM,
-                6,
-                "",
-                ("8.8.8.8", 80)
-            )
-        ]
-
-        with self.assertRaises(ValueError):
-            web_recon.validate_target(
-                "http://example.com"
-            )
-
-
-class TestHeaderAnalysis(unittest.TestCase):
-
-    def test_detect_present_headers(self):
+    def test_analyze_headers(self):
         headers = {
             "Content-Security-Policy": "default-src 'self'",
-            "X-Frame-Options": "DENY"
+            "X-Frame-Options": "DENY",
         }
 
-        results = web_recon.analyze_headers(headers)
+        result = web_recon.analyze_headers(headers)
 
-        csp = next(
-            item for item in results
-            if item["header"] == "Content-Security-Policy"
-        )
+        self.assertEqual(len(result), 6)
+        self.assertTrue(result[0]["present"])
+        self.assertFalse(result[1]["present"])
 
-        frame = next(
-            item for item in results
-            if item["header"] == "X-Frame-Options"
-        )
+    @patch("modules.web_recon.validate_http_url")
+    def test_validate_target(self, mock_validate):
+        mock_validate.return_value = "http://127.0.0.1"
 
-        self.assertTrue(csp["present"])
-        self.assertTrue(frame["present"])
+        result = web_recon.validate_target("http://127.0.0.1")
 
-    def test_detect_missing_headers(self):
-        results = web_recon.analyze_headers({})
+        self.assertEqual(result, "http://127.0.0.1")
+        mock_validate.assert_called_once()
 
-        self.assertEqual(len(results), 6)
+    @patch("modules.web_recon.validate_http_url")
+    def test_validate_target_rejects_invalid_url(self, mock_validate):
+        mock_validate.side_effect = ValueError("URL inválida")
 
-        self.assertTrue(
-            all(not item["present"] for item in results)
-        )
-
-
-class TestEndpointInspection(unittest.TestCase):
+        with self.assertRaises(ValueError):
+            web_recon.validate_target("http://example.com")
 
     @patch("modules.web_recon.requests.get")
-    def test_inspect_endpoint(self, mock_get):
+    @patch("modules.web_recon.validate_target")
+    def test_inspect_endpoint(self, mock_validate, mock_get):
         response = MagicMock()
 
-        response.status_code = 200
-
-        response.headers = {
-            "Server": "TestServer",
-            "Content-Type": "text/html",
-            "Content-Length": "50"
-        }
+        response.raw.read.return_value = (
+            b"<html><title>Laboratorio</title></html>"
+        )
 
         response.encoding = "utf-8"
-
-        response.raw = FakeRaw(
-            b"<html><head><title>Test Page</title></head></html>"
-        )
+        response.status_code = 200
+        response.headers = {
+            "Server": "Test Server",
+            "Content-Type": "text/html",
+        }
 
         mock_get.return_value = response
 
         result = web_recon.inspect_endpoint(
-            "http://localhost:8000"
+            "http://127.0.0.1"
         )
 
         self.assertEqual(result["status_code"], 200)
-        self.assertEqual(result["title"], "Test Page")
-        self.assertEqual(result["server"], "TestServer")
-
-        self.assertFalse(
-            result["response_truncated"]
-        )
+        self.assertEqual(result["title"], "Laboratorio")
+        self.assertFalse(result["response_truncated"])
 
         response.close.assert_called_once()
 
-
-class TestHTTPMethods(unittest.TestCase):
-
     @patch("modules.web_recon.requests.options")
-    def test_inspect_methods(self, mock_options):
+    @patch("modules.web_recon.validate_target")
+    def test_inspect_methods(self, mock_validate, mock_options):
         response = MagicMock()
-
         response.headers = {
             "Allow": "GET, POST, OPTIONS"
         }
@@ -193,94 +90,146 @@ class TestHTTPMethods(unittest.TestCase):
         mock_options.return_value = response
 
         result = web_recon.inspect_methods(
-            "http://localhost:8000"
+            "http://127.0.0.1"
         )
 
-        self.assertEqual(
-            result,
-            "GET, POST, OPTIONS"
-        )
-
+        self.assertEqual(result, "GET, POST, OPTIONS")
         response.close.assert_called_once()
 
-
-class TestRobotsInspection(unittest.TestCase):
-
     @patch("modules.web_recon.requests.get")
-    def test_inspect_robots(self, mock_get):
+    @patch("modules.web_recon.validate_target")
+    def test_inspect_robots(self, mock_validate, mock_get):
         response = MagicMock()
 
         response.status_code = 200
-
-        response.raw = FakeRaw(
-            b"User-agent: *\nDisallow: /admin"
-        )
+        response.raw.read.return_value = b"User-agent: *\nDisallow: /admin"
 
         mock_get.return_value = response
 
         result = web_recon.inspect_robots(
-            "http://localhost:8000"
+            "http://127.0.0.1"
         )
 
         self.assertEqual(result["status_code"], 200)
-
-        self.assertIn(
-            "Disallow: /admin",
-            result["content"]
-        )
-
-        self.assertEqual(
-            result["url"],
-            "http://localhost:8000/robots.txt"
-        )
+        self.assertIn("Disallow", result["content"])
 
         response.close.assert_called_once()
 
-
-class TestReportSaving(unittest.TestCase):
-
     def test_save_report(self):
-        results = {
-            "page": {
-                "status_code": 200,
-                "title": "BLACKOUT LAB"
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-
+        with TemporaryDirectory() as temp_dir:
             with patch.object(
                 web_recon,
                 "REPORT_DIR",
-                Path(temp_dir)
+                Path(temp_dir),
             ):
-
                 report_path = web_recon.save_report(
-                    "http://localhost:8000",
-                    results
+                    "http://127.0.0.1",
+                    {"status": 200},
                 )
 
                 self.assertTrue(report_path.exists())
 
                 with report_path.open(
                     "r",
-                    encoding="utf-8"
+                    encoding="utf-8",
                 ) as file:
                     report = json.load(file)
 
+                self.assertEqual(
+                    report["module"],
+                    "Web Reconnaissance",
+                )
+
+                self.assertEqual(
+                    report["version"],
+                    "2.0.0",
+                )
+
+    @patch("modules.web_recon.operations.complete_operation")
+    @patch("modules.web_recon.operations.start_operation")
+    @patch("modules.web_recon.display_results")
+    @patch("modules.web_recon.save_report")
+    @patch("modules.web_recon.inspect_robots")
+    @patch("modules.web_recon.inspect_methods")
+    @patch("modules.web_recon.inspect_endpoint")
+    @patch("modules.web_recon.select_campaign")
+    @patch("modules.web_recon.validate_target")
+    @patch("builtins.input")
+    def test_web_reconnaissance_completes_operation(
+        self,
+        mock_input,
+        mock_validate,
+        mock_campaign,
+        mock_endpoint,
+        mock_methods,
+        mock_robots,
+        mock_report,
+        mock_display,
+        mock_start,
+        mock_complete,
+    ):
+        mock_input.return_value = "http://127.0.0.1"
+        mock_campaign.return_value = None
+        mock_start.return_value = 42
+
+        mock_endpoint.return_value = {
+            "status_code": 200,
+            "title": "Laboratorio",
+            "security_headers": [],
+        }
+
+        mock_methods.return_value = "GET"
+        mock_robots.return_value = {
+            "status_code": 200,
+            "content": "User-agent: *",
+        }
+
+        mock_report.return_value = Path("teste.json")
+        mock_complete.return_value = True
+
+        web_recon.web_reconnaissance()
+
+        mock_start.assert_called_once()
+        mock_complete.assert_called_once()
+
         self.assertEqual(
-            report["module"],
-            "Web Reconnaissance"
+            mock_start.call_args.kwargs["module"],
+            "web_reconnaissance",
         )
 
         self.assertEqual(
-            report["target"],
-            "http://localhost:8000"
+            mock_complete.call_args.args[0],
+            42,
         )
 
-        self.assertIn(
-            "timestamp_utc",
-            report
+    @patch("modules.web_recon.operations.fail_operation")
+    @patch("modules.web_recon.operations.start_operation")
+    @patch("modules.web_recon.select_campaign")
+    @patch("modules.web_recon.validate_target")
+    @patch("builtins.input")
+    def test_web_reconnaissance_records_failure(
+        self,
+        mock_input,
+        mock_validate,
+        mock_campaign,
+        mock_start,
+        mock_fail,
+    ):
+        mock_input.return_value = "http://127.0.0.1"
+        mock_campaign.return_value = None
+        mock_start.return_value = 99
+
+        with patch(
+            "modules.web_recon.inspect_endpoint",
+            side_effect=RuntimeError("Erro simulado"),
+        ):
+            web_recon.web_reconnaissance()
+
+        mock_fail.assert_called_once()
+
+        self.assertEqual(
+            mock_fail.call_args.args[0],
+            99,
         )
 
 

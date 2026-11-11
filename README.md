@@ -1,87 +1,74 @@
-﻿
-# 🖤 BLACKOUT LAB
+﻿# 🖤 BLACKOUT LAB
 
-### Offensive Security Platform | Python
+### Offensive Security Platform | Python | Version 2.0.0
 
-O **BLACKOUT LAB** é uma plataforma modular de segurança ofensiva desenvolvida em Python, criada para transformar conhecimentos teóricos de cybersecurity em ferramentas práticas.
+O **BLACKOUT LAB** é uma plataforma modular desenvolvida em Python para estudos práticos de segurança ofensiva, reconhecimento e análise de aplicações.
 
-O projeto reúne módulos de reconhecimento, análise web, geração controlada de tráfego e simulação de exploração em uma única aplicação de terminal.
+O projeto reúne ferramentas de reconhecimento, geração controlada de tráfego, testes de estresse com limites definidos, simulação de exploração em laboratório e análise web.
 
-Seu desenvolvimento faz parte de uma jornada prática de estudos em **Red Team, Ethical Hacking, Pentest e desenvolvimento de ferramentas próprias**.
+A versão 2.0.0 também introduz uma estrutura de gerenciamento de campanhas, histórico de execuções, persistência de dados e testes automatizados.
 
-> Projeto educacional destinado exclusivamente a laboratórios próprios, ambientes isolados e sistemas com autorização expressa.
+> Projeto educacional destinado exclusivamente a ambientes próprios, laboratórios controlados e sistemas com autorização expressa.
 
 ---
 
 ## 🚀 Funcionalidades
 
-Atualmente, o BLACKOUT LAB possui seis módulos principais.
-
-### 1. 🔎 Reconnaissance — Reconhecimento
-
-Realiza reconhecimento básico de alvos em ambientes autorizados.
-
+### 1. 🔎 Reconnaissance
+- Reconhecimento básico de alvos.
 - Verificação de portas TCP.
-- Identificação básica de serviços.
-- Análise de portas abertas e fechadas.
-- Geração de relatórios em JSON.
+- Identificação de serviços.
+- Registro dos resultados em relatórios JSON.
 
-### 2. 📡 Traffic Generation — Geração de Tráfego
-
-Permite gerar requisições HTTP controladas para observar o comportamento de uma aplicação.
-
-- Envio de requisições HTTP.
+### 2. 📡 Traffic Generation
+- Geração controlada de requisições HTTP.
 - Monitoramento de códigos de resposta.
 - Medição de latência.
 - Contabilização de requisições e erros.
+- Limites de execução configurados para uso controlado.
 
-### 3. ⚡ Stress Testing — Testes de Estresse
+### 3. ⚡ Stress Testing
+- Perfis Load Test, Spike Test e Endurance Test.
+- Métricas de requisições, erros e latência.
+- Execução limitada a 2 requisições por segundo e duração máxima de 10 segundos.
+- Validação de escopo e restrições para alvos.
 
-Executa testes controlados para analisar como uma aplicação responde a diferentes níveis de carga.
-
-Perfis disponíveis:
-
-- **Load Test:** aumento gradual da carga.
-- **Spike Test:** simulação de um pico temporário de requisições.
-- **Endurance Test:** execução de carga constante durante um período definido.
-
-Apresenta métricas de requisições, erros, duração e latência.
-
-### 4. 🧪 Exploitation Simulation — Simulação de Exploração
-
-Demonstra, em um laboratório local e isolado, como uma consulta SQL vulnerável pode permitir manipulação de autenticação.
-
+### 4. 🧪 Exploitation Simulation
 - Simulação educacional de SQL Injection.
 - Comparação entre consultas vulneráveis e parametrizadas.
 - Demonstração de possível bypass de autenticação.
+- Uso de SQLite temporário em memória e dados fictícios.
 - Registro de evidências em JSON.
 
-O módulo utiliza um banco SQLite temporário em memória e dados fictícios.
-
-### 5. 📊 Campaign Reports — Relatórios de Campanha
-
-Centraliza os resultados gerados pelos módulos.
-
+### 5. 📊 Campaign Reports
 - Listagem de relatórios.
 - Visualização de resultados.
-- Consulta de métricas.
-- Exibição de evidências das simulações.
-- Armazenamento dos resultados em arquivos JSON.
+- Consulta de métricas e evidências.
+- Tratamento de relatórios inválidos ou incompletos.
 
-### 6. 🌐 Web Reconnaissance — Reconhecimento Web
-
-Realiza uma análise inicial de aplicações web em laboratórios autorizados.
-
-- Identificação do status HTTP.
+### 6. 🌐 Web Reconnaissance
+- Identificação de status HTTP.
 - Extração do título da página.
-- Identificação do servidor e Content-Type.
-- Consulta dos métodos HTTP anunciados pelo servidor.
-- Verificação de cabeçalhos de segurança HTTP.
+- Identificação de servidor e Content-Type.
+- Consulta de métodos HTTP anunciados.
+- Verificação de cabeçalhos de segurança.
 - Consulta ao arquivo robots.txt.
 - Limitação da quantidade de conteúdo HTTP lido.
-- Geração de relatórios em JSON.
+- Geração de relatórios JSON.
 
-O módulo realiza verificações informativas. Cabeçalhos ausentes ou métodos anunciados não representam, isoladamente, vulnerabilidades confirmadas.
+As verificações são informativas: cabeçalhos ausentes ou métodos anunciados não representam, isoladamente, vulnerabilidades confirmadas.
+
+---
+
+## 🧩 Gerenciamento e controle
+
+Além dos módulos de análise, o menu disponibiliza:
+
+- **Campaign Manager:** gerenciamento de campanhas.
+- **Execution History:** consulta do histórico de execuções.
+- **System Information:** informações da aplicação e configurações do laboratório.
+
+A estrutura `core` centraliza configurações, banco de dados, escopo, operações, campanhas, registros e controle de execução.
 
 ---
 
@@ -91,9 +78,9 @@ O módulo realiza verificações informativas. Cabeçalhos ausentes ou métodos 
 |---|---|
 | Python | Linguagem principal |
 | Requests | Requisições HTTP |
-| Rich | Interface visual no terminal |
-| SQLite | Simulação de consultas SQL |
-| JSON | Armazenamento de relatórios |
+| Rich | Interface no terminal |
+| SQLite | Persistência e simulação SQL |
+| JSON | Relatórios |
 | Unittest | Testes automatizados |
 | Git | Controle de versão |
 
@@ -101,11 +88,9 @@ O módulo realiza verificações informativas. Cabeçalhos ausentes ou métodos 
 
 ## 📋 Requisitos
 
-Antes de instalar, você precisa ter:
-
-- Python 3.10 ou superior.
-- Git instalado (opcional, mas recomendado).
-- Terminal ou PowerShell.
+- Python 3.
+- Git (recomendado).
+- PowerShell, CMD ou terminal Linux.
 - Conexão com a internet para instalar as dependências.
 
 ---
@@ -180,20 +165,20 @@ No Windows, também é possível executar diretamente:
 .\.venv\Scripts\python.exe .\main.py
 ```
 
-O menu principal apresenta os seis módulos disponíveis. Escolha o número correspondente à funcionalidade desejada.
+O menu principal disponibiliza seis módulos funcionais, além das opções de gerenciamento, histórico e informações do sistema.
 
 ---
 
 ## 🧪 Testes automatizados
 
-O projeto utiliza `unittest`, biblioteca nativa do Python, para validar funcionalidades do módulo Web Reconnaissance.
+O projeto utiliza `unittest` para validar seus componentes e funcionalidades.
 
-Execute os testes com:
+Execute todos os testes:
 
 **Windows PowerShell:**
 
 ```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 **Linux:**
@@ -202,7 +187,7 @@ Execute os testes com:
 python -m unittest discover -s tests -v
 ```
 
-Os testes verificam validação de alvos, análise de cabeçalhos, inspeção HTTP, métodos HTTP, robots.txt e geração de relatórios.
+A versão 2.0.0 foi validada com **175 testes automatizados aprovados**.
 
 ---
 
@@ -212,21 +197,37 @@ Os testes verificam validação de alvos, análise de cabeçalhos, inspeção HT
 BLACKOUT-LAB/
 │
 ├── core/
-│   └── __init__.py
+│   ├── campaigns.py
+│   ├── config.py
+│   ├── database.py
+│   ├── execution.py
+│   ├── lab.py
+│   ├── logger.py
+│   ├── operations.py
+│   └── scope.py
 │
 ├── modules/
-│   ├── __init__.py
-│   ├── recon.py
-│   ├── traffic.py
-│   ├── stress.py
 │   ├── exploitation.py
-│   ├── web_recon.py
-│   └── reports.py
+│   ├── recon.py
+│   ├── reports.py
+│   ├── stress.py
+│   ├── traffic.py
+│   └── web_recon.py
 │
 ├── tests/
+│   ├── test_campaigns.py
+│   ├── test_database.py
+│   ├── test_execution.py
+│   ├── test_exploitation.py
+│   ├── test_lab.py
+│   ├── test_logger.py
+│   ├── test_operations.py
+│   ├── test_recon.py
+│   ├── test_reports.py
+│   ├── test_scope.py
+│   ├── test_stress.py
+│   ├── test_traffic.py
 │   └── test_web_recon.py
-│
-├── reports/
 │
 ├── main.py
 ├── requirements.txt
@@ -234,19 +235,23 @@ BLACKOUT-LAB/
 └── .gitignore
 ```
 
-Os relatórios JSON são gerados localmente e ignorados pelo Git.
+Relatórios JSON, bancos de dados locais, logs, ambientes virtuais e arquivos temporários são mantidos fora do controle de versão por meio do `.gitignore`.
 
 ---
 
-## 🔐 Uso responsável
+## 🔐 Uso responsável e segurança
 
-O BLACKOUT LAB foi desenvolvido exclusivamente para aprendizado e testes de segurança autorizados.
+O BLACKOUT LAB foi desenvolvido para aprendizado e testes autorizados.
 
 - Utilize somente sistemas próprios ou com autorização expressa.
+- Respeite as regras e os limites de escopo.
 - Execute testes de tráfego e estresse em ambientes controlados.
-- Não utilize a plataforma para interromper serviços ou prejudicar terceiros.
+- Não utilize a ferramenta para interromper serviços ou prejudicar terceiros.
 - Realize simulações de exploração somente em laboratórios educacionais.
-- Respeite os limites de escopo e as regras de cada ambiente de testes.
+
+Os testes de tráfego e estresse possuem limites conservadores. O laboratório experimental de longa duração permanece desabilitado por padrão.
+
+**Esta versão não implementa funcionalidade operacional de DoS ou DDoS.**
 
 O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
 
@@ -254,11 +259,11 @@ O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
 
 ## 🎯 Objetivo do projeto
 
-O BLACKOUT LAB nasceu com o objetivo de transformar conhecimentos teóricos em experiências práticas de desenvolvimento e segurança ofensiva.
+O BLACKOUT LAB nasceu da vontade de transformar conhecimento teórico em experiência prática.
 
-Mais do que reunir funcionalidades, o projeto representa uma jornada de aprendizado envolvendo Python, reconhecimento, exploração controlada, análise de aplicações web e desenvolvimento de ferramentas próprias.
+A construção do projeto envolve desenvolvimento Python, organização modular, testes automatizados, reconhecimento, análise web, simulação controlada de exploração e fundamentos de segurança ofensiva.
 
-**O projeto continua em evolução, com foco no desenvolvimento de novas ferramentas e técnicas voltadas ao Red Team.**
+O projeto continua em evolução, com foco em aprendizado, qualidade de código e desenvolvimento de ferramentas próprias.
 
 ---
 
@@ -266,19 +271,12 @@ Mais do que reunir funcionalidades, o projeto representa uma jornada de aprendiz
 
 **Victor Andrey**
 
-Estudante de Engenharia de Software | Interessado em Cybersecurity, Red Team, Ethical Hacking, Python e Cloud Computing.
+Estudante de Engenharia de Software | Cybersecurity | Red Team | Ethical Hacking | Python | Cloud Computing.
 
-🔗 **GitHub:** https://github.com/vandreysouzat-code
+GitHub: https://github.com/vandreysouzat-code
 
-🔗 **Projeto:** https://github.com/vandreysouzat-code/BLACKOUT-LAB
+Projeto: https://github.com/vandreysouzat-code/BLACKOUT-LAB
 
 ---
 
-*Aprender construindo. Evoluir testando. Pensar como um atacante. 🖤*
-tps://github.com/vandreysouzat-code/BLACKOUT-LAB
-
-\---
-
-*Aprender construindo. Evoluir testando. Proteger entendendo.* 🖤
-
-
+*Aprender construindo. Evoluir testando. Proteger entendendo. 🖤*
