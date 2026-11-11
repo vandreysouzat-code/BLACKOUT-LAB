@@ -266,7 +266,7 @@ Mais do que reunir funcionalidades, o projeto representa uma jornada de aprendiz
 
 **Victor Andrey**
 
-Estudante de Engenharia de Software | Interessado em Cybersecurity, Red Team, Ethical Hacking, Python e Cloud Computing.
+Estudante de Análise e Desenvolvimento de Sistemas | Interessado em Cybersecurity, Red Team, Ethical Hacking, Python e Cloud Computing.
 
 🔗 **GitHub:** https://github.com/vandreysouzat-code
 
