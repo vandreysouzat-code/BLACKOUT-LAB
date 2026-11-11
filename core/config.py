@@ -1,6 +1,6 @@
 
 """
-Configurações centrais do BLACKOUT LAB 2.0.
+Configurações centrais do SOVIK 2.0.
 
 Centraliza caminhos, parâmetros de rede e limites
 de execução dos módulos da plataforma.
@@ -13,7 +13,7 @@ from pathlib import Path
 # IDENTIDADE DA PLATAFORMA
 # ============================================================
 
-APP_NAME = "BLACKOUT LAB"
+APP_NAME = "SOVIK"
 APP_VERSION = "2.0.0"
 
 
@@ -33,7 +33,7 @@ LOGS_DIR = PROJECT_ROOT / "logs"
 # ============================================================
 
 DEFAULT_TIMEOUT = 3
-USER_AGENT = "BLACKOUT-LAB/2.0"
+USER_AGENT = "SOVIK/2.0"
 
 MAX_HTTP_RESPONSE_BYTES = 500_000
 

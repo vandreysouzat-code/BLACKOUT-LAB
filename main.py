@@ -1,6 +1,6 @@
 
 """
-Ponto de entrada principal do BLACKOUT LAB 2.0.
+Ponto de entrada principal do SOVIK 2.0.
 """
 
 from rich.console import Console
@@ -31,7 +31,7 @@ from modules.web_recon import web_reconnaissance
 
 
 console = Console()
-logger = get_logger("blackout.main")
+logger = get_logger("sovik.main")
 
 
 def banner():
@@ -200,7 +200,7 @@ def menu():
     }
 
     if choice == "0":
-        console.print("[yellow]BLACKOUT LAB encerrado.[/yellow]")
+        console.print("[yellow]SOVIK encerrado.[/yellow]")
         return False
 
     try:
@@ -242,11 +242,11 @@ def main():
 
     except KeyboardInterrupt:
         console.print(
-            "\n[yellow]BLACKOUT LAB interrompido pelo usuário.[/yellow]"
+            "\n[yellow]SOVIK interrompido pelo usuário.[/yellow]"
         )
 
     finally:
-        logger.info("BLACKOUT LAB encerrado")
+        logger.info("SOVIK encerrado")
 
 
 if __name__ == "__main__":

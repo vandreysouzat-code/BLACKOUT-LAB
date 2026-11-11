@@ -1,6 +1,6 @@
 
 """
-Módulo Web Reconnaissance do BLACKOUT LAB 2.0.
+Módulo Web Reconnaissance do SOVIK 2.0.
 
 Analisa páginas HTTP/HTTPS em ambientes autorizados,
 registra operações e gera relatórios JSON.
@@ -25,7 +25,7 @@ from rich.table import Table
 
 
 console = Console()
-logger = get_logger("blackout.web_recon")
+logger = get_logger("sovik.web_recon")
 
 REPORT_DIR = Path(__file__).resolve().parent.parent / "reports"
 
@@ -33,7 +33,7 @@ TIMEOUT = 5
 MAX_RESPONSE_SIZE = 500_000
 MAX_ROBOTS_SIZE = 20_000
 
-USER_AGENT = "BLACKOUT-LAB/2.0"
+USER_AGENT = "SOVIK/2.0"
 
 
 class TitleParser(HTMLParser):
@@ -260,7 +260,7 @@ def save_report(url, results):
     timestamp = datetime.now(timezone.utc)
 
     report = {
-        "tool": "BLACKOUT LAB",
+        "tool": "SOVIK",
         "version": "2.0.0",
         "module": "Web Reconnaissance",
         "target": url,
@@ -398,7 +398,7 @@ def web_reconnaissance():
 
     console.print(
         Panel(
-            "[bold cyan]BLACKOUT LAB[/bold cyan]\n"
+            "[bold cyan]SOVIK[/bold cyan]\n"
             "[white]WEB RECONNAISSANCE[/white]\n"
             "[dim]Somente laboratórios próprios ou autorizados[/dim]",
             border_style="cyan",

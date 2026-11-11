@@ -1,6 +1,6 @@
 
 """
-Módulo de reconhecimento TCP do BLACKOUT LAB 2.0.
+Módulo de reconhecimento TCP do SOVIK 2.0.
 
 Realiza reconhecimento limitado de portas TCP em alvos
 validados pelo Core Engine e registra as operações.
@@ -24,7 +24,7 @@ REPORT_DIR = Path(__file__).resolve().parent.parent / "reports"
 MAX_PORTS = 20
 MAX_WORKERS = 20
 
-logger = get_logger("blackout.recon")
+logger = get_logger("sovik.recon")
 
 
 def validate_target(target):
@@ -100,7 +100,7 @@ def save_report(target, addresses, results):
     )
 
     report = {
-        "tool": "BLACKOUT LAB",
+        "tool": "SOVIK",
         "version": "2.0.0",
         "module": "Reconnaissance",
         "target": target,
@@ -169,7 +169,7 @@ def select_campaign():
 def reconnaissance():
     """Executa o reconhecimento e registra sua operação."""
 
-    print("\n=== BLACKOUT LAB | RECONNAISSANCE ===")
+    print("\n=== SOVIK | RECONNAISSANCE ===")
     print("Somente alvos próprios ou autorizados.")
     print("Escopo: localhost e redes privadas.\n")
 
@@ -294,7 +294,7 @@ def reconnaissance():
 
         print(
             "\n[!] Falha inesperada. "
-            "Consulte os logs do BLACKOUT LAB."
+            "Consulte os logs do SOVIK."
         )
 
 

@@ -1,6 +1,6 @@
 
 """
-Controlador central de execução do BLACKOUT LAB 2.0.
+Controlador central de execução do SOVIK 2.0.
 
 Gerencia duração, cancelamento e estado de experimentos.
 Não executa operações de rede.

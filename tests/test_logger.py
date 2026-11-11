@@ -48,7 +48,7 @@ class TestLogger(unittest.TestCase):
     def test_log_file_path_is_inside_logs_directory(self):
         from core.logger import LOG_FILE
 
-        self.assertEqual(LOG_FILE.name, "blackout-lab.log")
+        self.assertEqual(LOG_FILE.name, "sovik.log")
         self.assertEqual(LOG_FILE.parent.name, "logs")
 
 

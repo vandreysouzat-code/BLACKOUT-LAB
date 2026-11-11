@@ -207,7 +207,7 @@ def execute_stage(url, rps, seconds, stage_number):
                 allow_redirects=False,
                 stream=True,
                 headers={
-                    "User-Agent": "BLACKOUT-LAB/2.0"
+                    "User-Agent": "SOVIK/2.0"
                 }
             )
 
@@ -267,7 +267,7 @@ def save_report(url, profile, results, stage_summaries, elapsed):
     timestamp = datetime.now(timezone.utc)
 
     report = {
-        "tool": "BLACKOUT LAB",
+        "tool": "SOVIK",
         "module": "Stress Testing",
         "target": url,
         "timestamp_utc": timestamp.isoformat(),
@@ -359,7 +359,7 @@ def stress_testing():
     console.print(
         Panel(
             "[bold cyan]STRESS TESTING[/bold cyan]\n"
-            "[white]BLACKOUT LAB[/white]\n"
+            "[white]SOVIK[/white]\n"
             "[dim]Controlled laboratory performance tests[/dim]",
             border_style="cyan"
         )

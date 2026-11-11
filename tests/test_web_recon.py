@@ -12,11 +12,11 @@ from modules import web_recon
 class TestWebReconnaissance(unittest.TestCase):
 
     def test_get_page_title(self):
-        html = "<html><head><title>BLACKOUT LAB</title></head></html>"
+        html = "<html><head><title>SOVIK</title></head></html>"
 
         result = web_recon.get_page_title(html)
 
-        self.assertEqual(result, "BLACKOUT LAB")
+        self.assertEqual(result, "SOVIK")
 
     def test_get_page_title_missing(self):
         result = web_recon.get_page_title("<html></html>")

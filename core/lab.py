@@ -1,6 +1,6 @@
 
 """
-Controles de segurança do laboratório BLACKOUT LAB.
+Controles de segurança do laboratório SOVIK.
 
 Este módulo valida as condições necessárias antes de
 permitir a preparação de um experimento autorizado.

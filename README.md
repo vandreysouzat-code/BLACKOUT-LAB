@@ -1,12 +1,12 @@
-﻿# 🖤 BLACKOUT LAB
+﻿# 🦉 SOVIK
 
 ### Offensive Security Platform | Python | Version 2.0.0
 
-O **BLACKOUT LAB** é uma plataforma modular desenvolvida em Python para estudos práticos de segurança ofensiva, reconhecimento e análise de aplicações.
+O **SOVIK** é uma plataforma modular desenvolvida em Python para estudos práticos de segurança ofensiva, reconhecimento e análise de aplicações.
 
 O projeto reúne ferramentas de reconhecimento, geração controlada de tráfego, testes de estresse com limites definidos, simulação de exploração em laboratório e análise web.
 
-A versão 2.0.0 também introduz uma estrutura de gerenciamento de campanhas, histórico de execuções, persistência de dados e testes automatizados.
+A versão 2.0.0 também conta com uma estrutura de gerenciamento de campanhas, histórico de execuções, persistência de dados e testes automatizados.
 
 > Projeto educacional destinado exclusivamente a ambientes próprios, laboratórios controlados e sistemas com autorização expressa.
 
@@ -100,13 +100,13 @@ A estrutura `core` centraliza configurações, banco de dados, escopo, operaçõ
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/vandreysouzat-code/BLACKOUT-LAB.git
+git clone https://github.com/vandreysouzat-code/SOVIK.git
 ```
 
 ### 2. Acessar a pasta
 
 ```bash
-cd BLACKOUT-LAB
+cd SOVIK
 ```
 
 ### 3. Criar um ambiente virtual
@@ -175,26 +175,20 @@ O projeto utiliza `unittest` para validar seus componentes e funcionalidades.
 
 Execute todos os testes:
 
-**Windows PowerShell:**
-
-```powershell
-python -m unittest discover -s tests -v
-```
-
-**Linux:**
+**Windows PowerShell ou Linux:**
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-A versão 2.0.0 foi validada com **175 testes automatizados aprovados**.
+A versão 2.0.0 foi validada com **181 testes automatizados aprovados**.
 
 ---
 
 ## 📁 Estrutura do projeto
 
 ```text
-BLACKOUT-LAB/
+SOVIK/
 │
 ├── core/
 │   ├── campaigns.py
@@ -241,7 +235,7 @@ Relatórios JSON, bancos de dados locais, logs, ambientes virtuais e arquivos te
 
 ## 🔐 Uso responsável e segurança
 
-O BLACKOUT LAB foi desenvolvido para aprendizado e testes autorizados.
+O SOVIK foi desenvolvido para aprendizado e testes autorizados.
 
 - Utilize somente sistemas próprios ou com autorização expressa.
 - Respeite as regras e os limites de escopo.
@@ -259,7 +253,7 @@ O desenvolvedor não se responsabiliza pelo uso indevido da ferramenta.
 
 ## 🎯 Objetivo do projeto
 
-O BLACKOUT LAB nasceu da vontade de transformar conhecimento teórico em experiência prática.
+O SOVIK nasceu da vontade de transformar conhecimento teórico em experiência prática.
 
 A construção do projeto envolve desenvolvimento Python, organização modular, testes automatizados, reconhecimento, análise web, simulação controlada de exploração e fundamentos de segurança ofensiva.
 
@@ -271,12 +265,12 @@ O projeto continua em evolução, com foco em aprendizado, qualidade de código 
 
 **Victor Andrey**
 
-Estudante de Engenharia de Software | Cybersecurity | Red Team | Ethical Hacking | Python | Cloud Computing.
+Estudante de Análise e Desenvolvimento de Sistemas (ADS) | Cybersecurity | Red Team | Ethical Hacking | Python | Cloud Computing.
 
 GitHub: https://github.com/vandreysouzat-code
 
-Projeto: https://github.com/vandreysouzat-code/BLACKOUT-LAB
+Projeto: https://github.com/vandreysouzat-code/SOVIK
 
 ---
 
-*Aprender construindo. Evoluir testando. Proteger entendendo. 🖤*
+*Aprender construindo. Evoluir testando. Proteger entendendo. 🦉*

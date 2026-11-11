@@ -1,6 +1,6 @@
 
 """
-Sistema central de logs do BLACKOUT LAB 2.0.
+Sistema central de logs do SOVIK 2.0.
 """
 
 import logging
@@ -10,17 +10,17 @@ from logging.handlers import RotatingFileHandler
 from core.config import LOGS_DIR, APP_NAME
 
 
-LOG_FILE = LOGS_DIR / "blackout-lab.log"
+LOG_FILE = LOGS_DIR / "sovik.log"
 
 _logger = None
 
 
-def get_logger(name="blackout"):
+def get_logger(name="sovik"):
     """Retorna um logger configurado."""
 
     global _logger
 
-    if _logger is not None and name == "blackout":
+    if _logger is not None and name == "sovik":
         return _logger
 
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -49,7 +49,7 @@ def get_logger(name="blackout"):
         console_handler.setFormatter(formatter)
         logger.addHandler(console_handler)
 
-    if name == "blackout":
+    if name == "sovik":
         _logger = logger
 
     return logger

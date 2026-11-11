@@ -1,6 +1,6 @@
 
 """
-Serviço de gerenciamento de campanhas do BLACKOUT LAB 2.0.
+Serviço de gerenciamento de campanhas do SOVIK 2.0.
 
 Centraliza as operações de campanhas e suas execuções,
 utilizando a camada de banco de dados.

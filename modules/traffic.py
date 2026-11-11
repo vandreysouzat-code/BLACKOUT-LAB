@@ -1,6 +1,6 @@
 
 """
-Módulo Traffic Generation do BLACKOUT LAB 2.0.
+Módulo Traffic Generation do SOVIK 2.0.
 
 Gera tráfego HTTP controlado em laboratórios autorizados,
 com limites rígidos e registro centralizado das operações.
@@ -24,7 +24,7 @@ from rich.prompt import Prompt
 
 
 console = Console()
-logger = get_logger("blackout.traffic")
+logger = get_logger("sovik.traffic")
 
 MAX_DURATION = 10
 MAX_RPS = 2
@@ -133,7 +133,7 @@ def generate_traffic(url, duration):
                 allow_redirects=False,
                 stream=True,
                 headers={
-                    "User-Agent": "BLACKOUT-LAB/2.0"
+                    "User-Agent": "SOVIK/2.0"
                 }
             )
 
@@ -221,7 +221,7 @@ def save_report(
     )
 
     report = {
-        "tool": "BLACKOUT LAB",
+        "tool": "SOVIK",
         "version": "2.0.0",
         "module": "Traffic Generation",
         "target": url,
@@ -309,7 +309,7 @@ def traffic_generation():
     """Interface interativa do módulo."""
 
     console.print(
-        "\n=== BLACKOUT LAB 2.0 | TRAFFIC GENERATION ==="
+        "\n=== SOVIK 2.0 | TRAFFIC GENERATION ==="
     )
 
     console.print(

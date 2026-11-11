@@ -1,6 +1,6 @@
 
 """
-Gerenciador central de operações do BLACKOUT LAB 2.0.
+Gerenciador central de operações do SOVIK 2.0.
 
 Controla o registro, início, conclusão, cancelamento
 e falha das operações no banco de dados.
@@ -10,7 +10,7 @@ from core import database
 from core.logger import get_logger
 
 
-logger = get_logger("blackout.operations")
+logger = get_logger("sovik.operations")
 
 
 TERMINAL_STATUSES = {

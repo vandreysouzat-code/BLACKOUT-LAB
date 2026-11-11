@@ -1,6 +1,6 @@
 
 """
-Banco de dados central do BLACKOUT LAB 2.0.
+Banco de dados central do SOVIK 2.0.
 
 Armazena campanhas e histórico de execuções usando SQLite.
 """
